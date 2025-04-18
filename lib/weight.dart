@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:height_weight/widgets/display_chip.dart';
+import 'package:height_weight/widgets/question_label.dart';
 import 'package:height_weight/widgets/simple_ruler.dart';
+import 'package:height_weight/widgets/submit_button.dart';
 import 'package:height_weight/widgets/toggle_button.dart';
+import 'package:height_weight/widgets/top_stack.dart';
 
 class WeightSelector extends StatefulWidget {
   final double? height;
@@ -56,49 +58,13 @@ class _WeightSelectorState extends State<WeightSelector> {
         ),
         child: Column(
           children: [
-            Stack(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(top: 8),
-                        height: 48,
-                        width: 48,
-                        padding: EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: Color(0x10F3F4F1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: SvgPicture.asset('assets/icons/arrow-left.svg'),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(child: SvgPicture.asset('assets/icons/emblem.svg')),
-                  ],
-                ),
-              ],
+            TopStack(
+              onTap: () {
+                Navigator.pop(context);
+              },
             ),
             SizedBox(height: 52),
-            Text(
-              "What's your Weight?".toUpperCase(),
-              textAlign: TextAlign.center,
-              style: GoogleFonts.inter(
-                fontSize: 24,
-                fontWeight: FontWeight.w500,
-                height: 1.0,
-                letterSpacing: -0.1,
-                color: Colors.white,
-              ),
-            ),
+            QuestionLabel(textLabel: "What's your Weight?"),
             SizedBox(height: 24),
             ValueListenableBuilder(
               valueListenable: isSelectedNotifier,
@@ -269,24 +235,7 @@ class _WeightSelectorState extends State<WeightSelector> {
               ],
             ),
             Spacer(),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFFFF0000),
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 32),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(99999),
-                ),
-              ),
-              onPressed: () {},
-              child: Text(
-                "SUBMIT",
-                style: GoogleFonts.inter(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
+            SubmitButton(),
             SizedBox(height: screenHeight < 700 ? 12 : 60),
           ],
         ),

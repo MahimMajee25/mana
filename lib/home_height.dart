@@ -4,8 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:height_weight/weight.dart';
 import 'package:height_weight/widgets/display_chip.dart';
 import 'package:height_weight/widgets/height_ruler.dart';
+import 'package:height_weight/widgets/question_label.dart';
 import 'package:height_weight/widgets/simple_ruler.dart';
+import 'package:height_weight/widgets/submit_button.dart';
 import 'package:height_weight/widgets/toggle_button.dart';
+import 'package:height_weight/widgets/top_stack.dart';
 
 class HeightSelector extends StatefulWidget {
   const HeightSelector({super.key});
@@ -166,50 +169,9 @@ class _HeightSelectorState extends State<HeightSelector> {
             ),
             child: Column(
               children: [
-                Stack(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GestureDetector(
-                          child: Container(
-                            margin: EdgeInsets.only(top: 8),
-                            height: 48,
-                            width: 48,
-                            padding: EdgeInsets.all(14),
-                            decoration: BoxDecoration(
-                              color: Color(0x10F3F4F1),
-                              shape: BoxShape.circle,
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/icons/arrow-left.svg',
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: SvgPicture.asset('assets/icons/emblem.svg'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                TopStack(),
                 SizedBox(height: 52),
-                Text(
-                  "What's your Height?".toUpperCase(),
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.inter(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                    height: 1.0,
-                    letterSpacing: -0.1,
-                    color: Colors.white,
-                  ),
-                ),
+                QuestionLabel(textLabel: "What's your Height?"),
                 SizedBox(height: 24),
                 ValueListenableBuilder(
                   valueListenable: isSelectedNotifier,
@@ -276,14 +238,7 @@ class _HeightSelectorState extends State<HeightSelector> {
                   },
                 ),
                 Spacer(),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFFF0000),
-                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 32),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(99999),
-                    ),
-                  ),
+                SubmitButton(
                   onPressed: () {
                     double heightToSend =
                         isSelectedNotifier.value
@@ -298,14 +253,6 @@ class _HeightSelectorState extends State<HeightSelector> {
                       ),
                     );
                   },
-                  child: Text(
-                    "SUBMIT",
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
                 ),
                 SizedBox(height: 60),
               ],
