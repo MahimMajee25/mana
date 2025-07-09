@@ -30,8 +30,19 @@ class _CustomVerticalSliderState extends State<CustomVerticalSlider> {
 
         return Stack(
           children: [
+            // Background track with full height
             CustomPaint(
-              painter: _TrackPainter(),
+              painter: _BackgroundTrackPainter(
+                trackWidth: trackWidth,
+                padding: padding,
+                numberHeight: numberHeight,
+              ),
+              size: Size(constraints.maxWidth, constraints.maxHeight),
+            ),
+
+            // Tick marks
+            CustomPaint(
+              painter: _TickPainter(),
               size: Size(constraints.maxWidth, constraints.maxHeight),
             ),
 
@@ -122,11 +133,46 @@ class _CustomVerticalSliderState extends State<CustomVerticalSlider> {
   }
 }
 
-class _TrackPainter extends CustomPainter {
+class _BackgroundTrackPainter extends CustomPainter {
+  final double trackWidth;
+  final double padding;
+  final double numberHeight;
+
+  _BackgroundTrackPainter({
+    required this.trackWidth,
+    required this.padding,
+    required this.numberHeight,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Create full height track with same shape as fill
+    final rect = RRect.fromRectAndRadius(
+      Rect.fromLTRB(
+        size.width / 2 - trackWidth / 2,
+        padding,
+        size.width / 2 + trackWidth / 2,
+        size.height - numberHeight,
+      ),
+      const Radius.circular(40),
+    );
+
+    final backgroundPaint = Paint()
+      ..color = Colors.grey
+      ..style = PaintingStyle.fill;
+
+    canvas.drawRRect(rect, backgroundPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _TickPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final tickPaint = Paint()
-      ..color = Colors.grey // Changed from Colors.grey.shade800 to Colors.grey
+      ..color = Colors.grey.shade600
       ..strokeWidth = 1;
 
     const double padding = 24;
