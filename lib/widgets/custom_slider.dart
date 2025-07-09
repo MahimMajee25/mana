@@ -168,16 +168,16 @@ class _CustomVerticalSliderState extends State<_CustomVerticalSlider> {
   }
 
   double _calculateThumbPosition(double trackHeight, double padding, double numberHeight) {
-    final normalizedValue = (widget.value - 1) / 9; // 0 to 1
-    return padding + (trackHeight * (1 - normalizedValue)); // Inverted so 1 is at bottom
+    final normalizedValue = widget.value / 10; // 0 to 1 (changed from (value - 1) / 9)
+    return padding + (trackHeight * (1 - normalizedValue)); // Inverted so 10 is at top
   }
 
   void _updateValue(double dy, double trackHeight, double padding, double numberHeight) {
     final adjustedY = dy - padding;
     final normalizedPosition = (trackHeight - adjustedY) / trackHeight; // Inverted
     final clampedPosition = normalizedPosition.clamp(0.0, 1.0);
-    final newValue = 1 + (clampedPosition * 9);
-    final roundedValue = newValue.round().toDouble().clamp(1.0, 10.0);
+    final newValue = clampedPosition * 10; // Changed from 1 + (clampedPosition * 9)
+    final roundedValue = newValue.round().toDouble().clamp(0.0, 10.0); // Changed from 1.0, 10.0
 
     if (roundedValue != widget.value) {
       widget.onChanged(roundedValue);
@@ -189,15 +189,15 @@ class _TrackPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final tickPaint = Paint()
-      ..color = Colors.grey.shade800
+      ..color = Colors.grey // Changed from Colors.grey.shade800 to Colors.grey
       ..strokeWidth = 1;
 
     const double padding = 24;
     const double numberHeight = 36;
     final trackHeight = size.height - numberHeight - (padding * 2);
-    final spacing = trackHeight / 9;
+    final spacing = trackHeight / 10; // Changed from 9 to 10 for 0-10 scale
 
-    for (int i = 0; i <= 9; i++) {
+    for (int i = 0; i <= 10; i++) { // Changed from 9 to 10
       final dy = padding + (i * spacing);
       canvas.drawLine(
         Offset(size.width / 2 - 10, dy),
