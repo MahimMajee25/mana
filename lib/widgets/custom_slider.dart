@@ -1,165 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-//
-//
-// class VerticalRangeSelector extends StatefulWidget {
-//   const VerticalRangeSelector({super.key});
-//
-//   @override
-//   _VerticalRangeSelectorState createState() => _VerticalRangeSelectorState();
-// }
-//
-// class _VerticalRangeSelectorState extends State<VerticalRangeSelector> {
-//   double _value = 6;
-//   double? _lastValue;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.black,
-//       body: SafeArea(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Text(
-//               'HOW MANY TIMES PER DAY DO YOU PREFER TO EAT?',
-//               textAlign: TextAlign.center,
-//               style: TextStyle(
-//                 color: Colors.white,
-//                 fontSize: 16,
-//                 letterSpacing: 0.5,
-//               ),
-//             ),
-//             SizedBox(height: 30),
-//             Center(
-//               child: SizedBox(
-//                 height: 320,
-//                 child: Stack(
-//                   alignment: Alignment.center,
-//                   children: [
-//                     // Tick lines (background)
-//                     Positioned.fill(
-//                       child: CustomPaint(
-//                         painter: _TickLinePainter(),
-//                       ),
-//                     ),
-//                     RotatedBox(
-//                       quarterTurns: -1,
-//                       child: SliderTheme(
-//                         data: SliderTheme.of(context).copyWith(
-//                           activeTrackColor: Colors.transparent,
-//                           inactiveTrackColor: Colors.transparent,
-//                           trackHeight: 60,
-//                           overlayShape: SliderComponentShape.noOverlay,
-//                           thumbShape: _CustomThumbShape(),
-//                           tickMarkShape: RoundSliderTickMarkShape(tickMarkRadius: 0),
-//                           activeTickMarkColor: Colors.transparent,
-//                           inactiveTickMarkColor: Colors.transparent,
-//                         ),
-//                         child: Slider(
-//                           value: _value,
-//                           min: 1,
-//                           max: 10,
-//                           divisions: 9,
-//                           onChanged: (val) {
-//                             setState(() {
-//                               _value = val;
-//
-//                               // Haptic feedback on value change
-//                               if (_lastValue != val) {
-//                                 HapticFeedback.lightImpact();
-//                                 _lastValue = val;
-//                               }
-//                             });
-//                           },
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//             SizedBox(height: 20),
-//             Text(
-//               _value.toInt().toString(),
-//               style: TextStyle(
-//                 color: Colors.white,
-//                 fontSize: 24,
-//                 fontWeight: FontWeight.w600,
-//               ),
-//             ),
-//             SizedBox(height: 4),
-//             Text(
-//               'TIMES A DAY',
-//               style: TextStyle(
-//                 color: Colors.white,
-//                 fontSize: 16,
-//                 letterSpacing: 0.4,
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
-// class _CustomThumbShape extends SliderComponentShape {
-//   @override
-//   Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size(32, 32);
-//
-//   @override
-//   void paint(
-//       PaintingContext context,
-//       Offset center, {
-//         required Animation<double> activationAnimation,
-//         required Animation<double> enableAnimation,
-//         required bool isDiscrete,
-//         required TextPainter labelPainter,
-//         required RenderBox parentBox,
-//         required SliderThemeData sliderTheme,
-//         required TextDirection textDirection,
-//         required double value,
-//         required double textScaleFactor,
-//         required Size sizeWithOverflow,
-//       }) {
-//     final Canvas canvas = context.canvas;
-//
-//     final outerPaint = Paint()
-//       ..color = Colors.red
-//       ..style = PaintingStyle.stroke
-//       ..strokeWidth = 3;
-//
-//     canvas.drawCircle(center, 12, outerPaint);
-//
-//     final innerPaint = Paint()
-//       ..color = Colors.black
-//       ..style = PaintingStyle.fill;
-//
-//     canvas.drawCircle(center, 10, innerPaint);
-//   }
-// }
-//
-// class _TickLinePainter extends CustomPainter {
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     final tickPaint = Paint()
-//       ..color = Colors.grey.shade800
-//       ..strokeWidth = 1;
-//
-//     final spacing = size.height / 9;
-//     for (int i = 0; i <= 9; i++) {
-//       final dy = i * spacing;
-//       canvas.drawLine(Offset(size.width / 2 - 10, dy), Offset(size.width / 2 + 10, dy), tickPaint);
-//     }
-//   }
-//
-//   @override
-//   bool shouldRepaint(CustomPainter oldDelegate) => false;
-// }
-
-
-/*
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -182,7 +20,7 @@ class _VerticalRangeSelectorState extends State<VerticalRangeSelector> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'HOW MANY TIMES PER DAY DO YOU PREFER TO EAT?',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -191,74 +29,26 @@ class _VerticalRangeSelectorState extends State<VerticalRangeSelector> {
                 letterSpacing: 0.5,
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Center(
               child: SizedBox(
-                height: 320,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Tick lines (background)
-                    Positioned.fill(
-                      child: CustomPaint(
-                        painter: _TickLinePainter(),
-                      ),
-                    ),
-
-                    // Area below the thumb
-                    Positioned.fill(
-                      child: CustomPaint(
-                        painter: _SliderFillPainter(value: _value),
-                      ),
-                    ),
-
-                    // Vertical slider
-                    RotatedBox(
-                      quarterTurns: -1,
-                      child: SliderTheme(
-                        data: SliderTheme.of(context).copyWith(
-                          activeTrackColor: Colors.transparent,
-                          inactiveTrackColor: Colors.transparent,
-                          trackHeight: 60,
-                          overlayShape: SliderComponentShape.noOverlay,
-                          thumbShape: _CustomThumbShape(),
-                          tickMarkShape: RoundSliderTickMarkShape(tickMarkRadius: 0),
-                          activeTickMarkColor: Colors.transparent,
-                          inactiveTickMarkColor: Colors.transparent,
-                        ),
-                        child: Slider(
-                          value: _value,
-                          min: 1,
-                          max: 10,
-                          divisions: 9,
-                          onChanged: (val) {
-                            setState(() {
-                              _value = val;
-
-                              if (_lastValue != val) {
-                                HapticFeedback.lightImpact();
-                                _lastValue = val;
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
+                height: 360,
+                child: _CustomVerticalSlider(
+                  value: _value,
+                  onChanged: (val) {
+                    setState(() {
+                      _value = val;
+                      if (_lastValue != val) {
+                        HapticFeedback.lightImpact();
+                        _lastValue = val;
+                      }
+                    });
+                  },
                 ),
               ),
             ),
-            SizedBox(height: 20),
-            Text(
-              _value.toInt().toString(),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            SizedBox(height: 4),
-            Text(
+            const SizedBox(height: 12),
+            const Text(
               'TIMES A DAY',
               style: TextStyle(
                 color: Colors.white,
@@ -273,257 +63,142 @@ class _VerticalRangeSelectorState extends State<VerticalRangeSelector> {
   }
 }
 
-class _CustomThumbShape extends SliderComponentShape {
-  @override
-  Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size(32, 32);
+class _CustomVerticalSlider extends StatefulWidget {
+  final double value;
+  final ValueChanged<double> onChanged;
+
+  const _CustomVerticalSlider({
+    required this.value,
+    required this.onChanged,
+  });
 
   @override
-  void paint(
-      PaintingContext context,
-      Offset center, {
-        required Animation<double> activationAnimation,
-        required Animation<double> enableAnimation,
-        required bool isDiscrete,
-        required TextPainter labelPainter,
-        required RenderBox parentBox,
-        required SliderThemeData sliderTheme,
-        required TextDirection textDirection,
-        required double value,
-        required double textScaleFactor,
-        required Size sizeWithOverflow,
-      }) {
-    final Canvas canvas = context.canvas;
-
-    final outerPaint = Paint()
-      ..color = Colors.red
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3;
-
-    canvas.drawCircle(center, 12, outerPaint);
-
-    final innerPaint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.fill;
-
-    canvas.drawCircle(center, 10, innerPaint);
-  }
+  _CustomVerticalSliderState createState() => _CustomVerticalSliderState();
 }
 
-class _TickLinePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final tickPaint = Paint()
-      ..color = Colors.grey.shade800
-      ..strokeWidth = 1;
+class _CustomVerticalSliderState extends State<_CustomVerticalSlider> {
+  bool _isDragging = false;
 
-    final spacing = size.height / 9;
-    for (int i = 0; i <= 9; i++) {
-      final dy = i * spacing;
-      canvas.drawLine(Offset(size.width / 2 - 10, dy), Offset(size.width / 2 + 10, dy), tickPaint);
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const double thumbRadius = 16;
+        const double trackWidth = 40;
+        const double numberHeight = 36;
+        const double padding = 24;
+
+        final trackHeight = constraints.maxHeight - numberHeight - (padding * 2);
+        final thumbPosition = _calculateThumbPosition(trackHeight, padding, numberHeight);
+
+        return Stack(
+          children: [
+            // Background track and ticks
+            CustomPaint(
+              painter: _TrackPainter(),
+              size: Size(constraints.maxWidth, constraints.maxHeight),
+            ),
+
+            // Fill area
+            CustomPaint(
+              painter: _FillPainter(
+                value: widget.value,
+                thumbPosition: thumbPosition,
+                trackWidth: trackWidth,
+              ),
+              size: Size(constraints.maxWidth, constraints.maxHeight),
+            ),
+
+            // Thumb
+            Positioned(
+              left: (constraints.maxWidth - thumbRadius * 2) / 2,
+              top: thumbPosition - thumbRadius,
+              child: Container(
+                width: thumbRadius * 2,
+                height: thumbRadius * 2,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.black,
+                  border: Border.all(color: Colors.red, width: 3),
+                ),
+              ),
+            ),
+
+            // Value display
+            Positioned(
+              bottom: 12,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Text(
+                  widget.value.toInt().toString(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+
+            // Gesture detector
+            GestureDetector(
+              onPanStart: (details) {
+                _isDragging = true;
+                _updateValue(details.localPosition.dy, trackHeight, padding, numberHeight);
+              },
+              onPanUpdate: (details) {
+                if (_isDragging) {
+                  _updateValue(details.localPosition.dy, trackHeight, padding, numberHeight);
+                }
+              },
+              onPanEnd: (details) {
+                _isDragging = false;
+              },
+              child: Container(
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+                color: Colors.transparent,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  double _calculateThumbPosition(double trackHeight, double padding, double numberHeight) {
+    final normalizedValue = (widget.value - 1) / 9; // 0 to 1
+    return padding + (trackHeight * (1 - normalizedValue)); // Inverted so 1 is at bottom
+  }
+
+  void _updateValue(double dy, double trackHeight, double padding, double numberHeight) {
+    final adjustedY = dy - padding;
+    final normalizedPosition = (trackHeight - adjustedY) / trackHeight; // Inverted
+    final clampedPosition = normalizedPosition.clamp(0.0, 1.0);
+    final newValue = 1 + (clampedPosition * 9);
+    final roundedValue = newValue.round().toDouble().clamp(1.0, 10.0);
+
+    if (roundedValue != widget.value) {
+      widget.onChanged(roundedValue);
     }
   }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
 
-class _SliderFillPainter extends CustomPainter {
-  final double value;
-
-  _SliderFillPainter({required this.value});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final height = size.height;
-    final width = size.width;
-
-    const divisions = 9;
-    const double thumbRadius = 16; // Half of the thumb size (32x32)
-    const double borderWidth = 2;
-
-    // Total vertical range for 9 steps (10 values = 9 gaps)
-    final double spacing = height / divisions;
-
-    // Compute thumb Y-center
-    final thumbCenterY = height - ((value - 1) * spacing);
-
-    // Draw from bottom to (thumb center + thumb radius)
-    final fillTop = thumbCenterY - thumbRadius - borderWidth;
-    final fillBottom = height;
-
-    final fillHeight = fillBottom - fillTop;
-
-    final rect = RRect.fromRectAndRadius(
-      Rect.fromLTWH(width / 2 - 20, fillTop, 40, fillHeight),
-      Radius.circular(40),
-    );
-
-    final fillPaint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.fill;
-
-    final borderPaint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = borderWidth;
-
-    canvas.drawRRect(rect, fillPaint);
-    canvas.drawRRect(rect, borderPaint);
-  }
-
-  @override
-  bool shouldRepaint(_SliderFillPainter oldDelegate) =>
-      oldDelegate.value != value;
-}
-*/
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-class VerticalRangeSelector extends StatefulWidget {
-  const VerticalRangeSelector({super.key});
-
-  @override
-  _VerticalRangeSelectorState createState() => _VerticalRangeSelectorState();
-}
-
-class _VerticalRangeSelectorState extends State<VerticalRangeSelector> {
-  double _value = 6;
-  double? _lastValue;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'HOW MANY TIMES PER DAY DO YOU PREFER TO EAT?',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                letterSpacing: 0.5,
-              ),
-            ),
-            SizedBox(height: 30),
-            Center(
-              child: SizedBox(
-                height: 360, // increased to accommodate number inside border
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Tick lines
-                    Positioned.fill(
-                      child: CustomPaint(
-                        painter: _TickLinePainter(),
-                      ),
-                    ),
-
-                    // Fill with number and border
-                    Positioned.fill(
-                      child: _SliderFillWithValuePainter(value: _value),
-                    ),
-
-                    // Slider
-                    RotatedBox(
-                      quarterTurns: -1,
-                      child: SliderTheme(
-                        data: SliderTheme.of(context).copyWith(
-                          activeTrackColor: Colors.transparent,
-                          inactiveTrackColor: Colors.transparent,
-                          trackHeight: 60,
-                          overlayShape: SliderComponentShape.noOverlay,
-                          thumbShape: _CustomThumbShape(),
-                          tickMarkShape: RoundSliderTickMarkShape(tickMarkRadius: 0),
-                          activeTickMarkColor: Colors.transparent,
-                          inactiveTickMarkColor: Colors.transparent,
-                        ),
-                        child: Slider(
-                          value: _value,
-                          min: 1,
-                          max: 10,
-                          divisions: 9,
-                          onChanged: (val) {
-                            setState(() {
-                              _value = val;
-                              if (_lastValue != val) {
-                                HapticFeedback.lightImpact();
-                                _lastValue = val;
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 12),
-            Text(
-              'TIMES A DAY',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                letterSpacing: 0.4,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _CustomThumbShape extends SliderComponentShape {
-  @override
-  Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size(32, 32);
-
-  @override
-  void paint(
-      PaintingContext context,
-      Offset center, {
-        required Animation<double> activationAnimation,
-        required Animation<double> enableAnimation,
-        required bool isDiscrete,
-        required TextPainter labelPainter,
-        required RenderBox parentBox,
-        required SliderThemeData sliderTheme,
-        required TextDirection textDirection,
-        required double value,
-        required double textScaleFactor,
-        required Size sizeWithOverflow,
-      }) {
-    final Canvas canvas = context.canvas;
-
-    final outerPaint = Paint()
-      ..color = Colors.red
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3;
-
-    canvas.drawCircle(center, 12, outerPaint);
-
-    final innerPaint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.fill;
-
-    canvas.drawCircle(center, 10, innerPaint);
-  }
-}
-
-class _TickLinePainter extends CustomPainter {
+class _TrackPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final tickPaint = Paint()
       ..color = Colors.grey.shade800
       ..strokeWidth = 1;
 
-    final spacing = size.height / 9;
+    const double padding = 24;
+    const double numberHeight = 36;
+    final trackHeight = size.height - numberHeight - (padding * 2);
+    final spacing = trackHeight / 9;
+
     for (int i = 0; i <= 9; i++) {
-      final dy = i * spacing;
+      final dy = padding + (i * spacing);
       canvas.drawLine(
         Offset(size.width / 2 - 10, dy),
         Offset(size.width / 2 + 10, dy),
@@ -533,54 +208,34 @@ class _TickLinePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-class _SliderFillWithValuePainter extends StatelessWidget {
+class _FillPainter extends CustomPainter {
   final double value;
-  const _SliderFillWithValuePainter({super.key, required this.value});
+  final double thumbPosition;
+  final double trackWidth;
 
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: _SliderFillPainter(value),
-      child: Container(
-        alignment: Alignment.bottomCenter,
-        padding: EdgeInsets.only(bottom: 12),
-        child: Text(
-          value.toInt().toString(),
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SliderFillPainter extends CustomPainter {
-  final double value;
-
-  _SliderFillPainter(this.value);
+  _FillPainter({
+    required this.value,
+    required this.thumbPosition,
+    required this.trackWidth,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final height = size.height;
-    final width = size.width;
-
-    const divisions = 9;
     const double thumbRadius = 16;
-    const double numberHeight = 36; // approximate height for number text + padding
+    const double numberHeight = 36;
 
-    final spacing = (height - numberHeight) / divisions;
-    final thumbCenterY = height - numberHeight - ((value - 1) * spacing);
-
-    final fillTop = thumbCenterY - thumbRadius - 2; // ensure thumb is inside
+    final fillTop = thumbPosition - thumbRadius - 2;
     final rect = RRect.fromRectAndRadius(
-      Rect.fromLTRB(width / 2 - 20, fillTop, width / 2 + 20, height),
-      Radius.circular(40),
+      Rect.fromLTRB(
+        size.width / 2 - trackWidth / 2,
+        fillTop,
+        size.width / 2 + trackWidth / 2,
+        size.height - numberHeight,
+      ),
+      const Radius.circular(40),
     );
 
     final fillPaint = Paint()
@@ -597,5 +252,6 @@ class _SliderFillPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_SliderFillPainter oldDelegate) => oldDelegate.value != value;
+  bool shouldRepaint(_FillPainter oldDelegate) =>
+      oldDelegate.value != value || oldDelegate.thumbPosition != thumbPosition;
 }
