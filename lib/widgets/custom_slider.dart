@@ -84,7 +84,7 @@ class _CustomVerticalSliderState extends State<_CustomVerticalSlider> {
     return LayoutBuilder(
       builder: (context, constraints) {
         const double thumbRadius = 16;
-        const double trackWidth = 40;
+        const double trackWidth = 36;
         const double numberHeight = 36;
         const double padding = 24;
 
@@ -93,7 +93,6 @@ class _CustomVerticalSliderState extends State<_CustomVerticalSlider> {
 
         return Stack(
           children: [
-            // Background track and ticks
             CustomPaint(
               painter: _TrackPainter(),
               size: Size(constraints.maxWidth, constraints.maxHeight),
@@ -126,16 +125,17 @@ class _CustomVerticalSliderState extends State<_CustomVerticalSlider> {
 
             // Value display
             Positioned(
-              bottom: 12,
+              bottom: 0,
               left: 0,
               right: 0,
+              top: 250,
               child: Center(
                 child: Text(
                   widget.value.toInt().toString(),
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
