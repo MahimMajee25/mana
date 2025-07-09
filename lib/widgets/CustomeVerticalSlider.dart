@@ -58,20 +58,21 @@ class _CustomVerticalSliderState extends State<CustomVerticalSlider> {
 
             // Thumb
             Positioned(
-              left: (constraints.maxWidth - thumbRadius * 2) / 2,
-              top: thumbPosition - thumbRadius,
+              left: (constraints.maxWidth - thumbRadius * 2) / 2+4,
+              top: thumbPosition - thumbRadius+5,
               child: Container(
-                width: thumbRadius * 2,
-                height: thumbRadius * 2,
+                width: 24,
+                height:24,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.black,
-                  border: Border.all(color: Colors.red, width: 3),
+                  border: Border.all(color: Colors.red, width: 4),
                 ),
               ),
             ),
 
             // Value display
+            if(widget.value.toInt()!=0)
             Positioned(
               bottom: 0,
               left: 0,
