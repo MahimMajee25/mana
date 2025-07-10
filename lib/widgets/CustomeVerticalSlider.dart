@@ -151,7 +151,7 @@ class _BackgroundTrackPainter extends CustomPainter {
     final rect = RRect.fromRectAndRadius(
       Rect.fromLTRB(
         size.width / 2 - trackWidth / 2,
-        padding-20,
+        padding-19,
         size.width / 2 + trackWidth / 2,
         size.height - numberHeight,
       ),

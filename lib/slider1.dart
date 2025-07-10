@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:height_weight/widgets/custom_slider.dart';
-import 'package:height_weight/widgets/xSlider.dart';
 
 class Slider1 extends StatefulWidget {
   const Slider1({super.key});
