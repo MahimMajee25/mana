@@ -1,53 +1,94 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class RangeSliderOk extends StatefulWidget {
-  const RangeSliderOk({super.key});
+class CustomRangeSlider extends StatefulWidget {
+  final double? sliderHeight;
+  final double? sliderWidth;
+  final double? minValue;
+  final double? maxValue;
+  final int? divisions;
+  final double? leftValue;
+  final ValueChanged<RangeValues> onChanged;
+
+  const CustomRangeSlider({
+    super.key,
+    this.sliderHeight,
+    this.sliderWidth,
+    this.minValue,
+    this.maxValue,
+    this.divisions,
+    this.leftValue,
+    required this.onChanged,
+  });
 
   @override
-  State<RangeSliderOk> createState() => _RangeSliderOkState();
+  State<CustomRangeSlider> createState() => _CustomRangeSliderState();
 }
 
-class _RangeSliderOkState extends State<RangeSliderOk> {
+class _CustomRangeSliderState extends State<CustomRangeSlider> {
   RangeValues _currentRangeValues = const RangeValues(1, 5);
   RangeValues _previousRangeValues = const RangeValues(1, 5);
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.leftValue != null) {
+      _currentRangeValues = RangeValues(widget.leftValue!, _currentRangeValues.end);
+      _previousRangeValues = _currentRangeValues;
+    }
+  }
+
+  @override
+  void didUpdateWidget(CustomRangeSlider oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.leftValue != oldWidget.leftValue && widget.leftValue != null) {
+      _currentRangeValues = RangeValues(widget.leftValue!, _currentRangeValues.end);
+      _previousRangeValues = _currentRangeValues;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+    return SizedBox(
+      width: widget.sliderWidth ?? double.maxFinite,
       child: SliderTheme(
         data: SliderThemeData(
-          rangeTickMarkShape: CustomRangeTickShape(), // Show tick marks only on inactive track
-          rangeTrackShape: CustomRangeTrackShape(), // Custom track with white border
+          rangeTickMarkShape: CustomRangeTickShape(),
+          rangeTrackShape: CustomRangeTrackShape(),
           rangeThumbShape: CustomRangeThumbShape(),
-          trackHeight: 36,
+          trackHeight: widget.sliderHeight ?? 36,
           inactiveTrackColor: const Color(0xFF272727),
           activeTrackColor: const Color(0xFF1A1B18),
-          thumbColor: Color(0xFFFF0101),
+          thumbColor: const Color(0xFFFF0101),
         ),
         child: RangeSlider(
           values: _currentRangeValues,
           onChanged: (val) {
             setState(() {
-              // Keep the start value fixed, only allow end value to change
-              RangeValues newValues = RangeValues(1.0, val.end);
+              RangeValues newValues;
 
-              // Check if end value changed (crossed a discrete value)
+              if (widget.leftValue != null) {
+                newValues = RangeValues(widget.leftValue!, val.end);
+              } else {
+                newValues = val;
+              }
+
+              bool startChanged = newValues.start.round() != _previousRangeValues.start.round();
               bool endChanged = newValues.end.round() != _previousRangeValues.end.round();
 
-              if (endChanged) {
-                // Trigger haptic feedback when crossing tick marks
+              if (startChanged || endChanged) {
                 HapticFeedback.selectionClick();
               }
 
               _previousRangeValues = _currentRangeValues;
               _currentRangeValues = newValues;
+
+              widget.onChanged(newValues);
             });
           },
-          min: 1,
-          max: 5,
-          divisions: 4,
+          min: widget.minValue ?? 1,
+          max: widget.maxValue ?? 5,
+          divisions: widget.divisions ?? 4,
         ),
       ),
     );
@@ -74,20 +115,19 @@ class CustomRangeTickShape extends RangeSliderTickMarkShape {
       }) {
     final canvas = context.canvas;
 
-    // Only show tick marks on inactive track (outside the range)
     final bool isInActiveRange = center.dx >= startThumbCenter.dx && center.dx <= endThumbCenter.dx;
 
     if (!isInActiveRange) {
       final Paint thumbPaint =
       Paint()
-        ..color = Color(0xFF393939)
+        ..color = const Color(0xFF393939)
         ..style = PaintingStyle.fill;
 
       canvas.drawCircle(center, 6, thumbPaint);
 
       final Paint innerPaint =
       Paint()
-        ..color = Color(0xFF1F1F1F)
+        ..color = const Color(0xFF1F1F1F)
         ..style = PaintingStyle.fill;
 
       canvas.drawCircle(center, 6 * 0.6, innerPaint);
@@ -135,45 +175,38 @@ class CustomRangeTrackShape extends RangeSliderTrackShape {
     final Canvas canvas = context.canvas;
     final double trackRadius = trackRect.height / 2;
 
-    // Paint inactive track (full width)
-    final Paint inactiveTrackPaint = Paint()
+    final Paint inactiveTrackPaint =
+    Paint()
       ..color = sliderTheme.inactiveTrackColor!
       ..style = PaintingStyle.fill;
 
-    final RRect inactiveTrackRRect = RRect.fromRectAndRadius(
-      trackRect,
-      Radius.circular(trackRadius),
-    );
+    final RRect inactiveTrackRRect = RRect.fromRectAndRadius(trackRect, Radius.circular(trackRadius));
     canvas.drawRRect(inactiveTrackRRect, inactiveTrackPaint);
 
-    // Paint active track (between thumbs, extending to thumb centers)
-    final double thumbRadius = 12.0; // Match the thumb radius
-    final double activeTrackLeft = startThumbCenter.dx - thumbRadius-6;
-    final double activeTrackRight = endThumbCenter.dx + thumbRadius+6;
+    final double thumbRadius = 12.0;
+    final double activeTrackLeft = startThumbCenter.dx - thumbRadius - 6;
+    final double activeTrackRight = endThumbCenter.dx + thumbRadius + 6;
     final double activeTrackWidth = activeTrackRight - activeTrackLeft;
 
     if (activeTrackWidth > 0) {
       final Rect activeTrackRect = Rect.fromLTWH(
-        activeTrackLeft.clamp(trackRect.left, trackRect.right - activeTrackWidth+10),
+        activeTrackLeft.clamp(trackRect.left, trackRect.right - activeTrackWidth + 10),
         trackRect.top,
         activeTrackWidth.clamp(0, trackRect.width),
         trackRect.height,
       );
 
-      // Paint active track background
-      final Paint activeTrackPaint = Paint()
+      final Paint activeTrackPaint =
+      Paint()
         ..color = sliderTheme.activeTrackColor!
         ..style = PaintingStyle.fill;
 
-      final RRect activeTrackRRect = RRect.fromRectAndRadius(
-        activeTrackRect,
-        Radius.circular(trackRadius),
-      );
+      final RRect activeTrackRRect = RRect.fromRectAndRadius(activeTrackRect, Radius.circular(trackRadius));
       canvas.drawRRect(activeTrackRRect, activeTrackPaint);
 
-      // Paint white border around active track
-      final Paint borderPaint = Paint()
-        ..color = Color(0x70F3F4F1)
+      final Paint borderPaint =
+      Paint()
+        ..color = const Color(0x70F3F4F1)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.0;
 
@@ -217,21 +250,19 @@ class CustomRangeThumbShape extends RangeSliderThumbShape {
     final Canvas canvas = context.canvas;
     final Tween<double> radiusTween = Tween<double>(begin: disabledThumbRadius, end: thumbRadius);
 
-    final double radius = radiusTween.evaluate(enableAnimation)-2;
+    final double radius = radiusTween.evaluate(enableAnimation) - 2;
     final double currentElevation = isPressed == true ? pressedElevation : elevation;
 
     final Path shadowPath = Path()..addOval(Rect.fromCircle(center: center, radius: radius));
     canvas.drawShadow(shadowPath, Colors.black, currentElevation, true);
 
-    final Paint thumbPaint =
-    Paint()
+    final Paint thumbPaint = Paint()
       ..color = sliderTheme.thumbColor ?? Colors.blue
       ..style = PaintingStyle.fill;
 
     canvas.drawCircle(center, radius, thumbPaint);
 
-    final Paint innerPaint =
-    Paint()
+    final Paint innerPaint = Paint()
       ..color = Colors.black
       ..style = PaintingStyle.fill;
 

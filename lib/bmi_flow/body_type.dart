@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:height_weight/bmi_flow/target_body_type.dart';
 import 'package:height_weight/widgets/question_label.dart';
 import 'package:height_weight/widgets/single_selector_slider.dart';
 import 'package:height_weight/widgets/submit_button.dart';
@@ -14,7 +15,7 @@ class BodyTypeSelector extends StatefulWidget {
 }
 
 class _BodyTypeSelectorState extends State<BodyTypeSelector> {
-  ValueNotifier<double> sliderValue = ValueNotifier<double>(1.0);
+  double sliderValue = 1.0;
 
   @override
   void initState() {
@@ -51,7 +52,7 @@ class _BodyTypeSelectorState extends State<BodyTypeSelector> {
             Column(
               children: [
                 SingleSelectorSlider(sliderWidth: 339,onChanged: (val){
-                  sliderValue.value=val;
+                  sliderValue=val;
                 },),
                 SizedBox(height: 12,),
                 Row(
@@ -104,7 +105,15 @@ class _BodyTypeSelectorState extends State<BodyTypeSelector> {
               ),
             ),
             Spacer(),
-            SubmitButton(submitText: "NEXT"),
+            SubmitButton(submitText: "NEXT",onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) => TargetBodyTypeSelector(),
+                ),
+              );
+            },),
           ],
         ),
       ),
