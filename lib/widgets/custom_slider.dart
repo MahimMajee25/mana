@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'CustomeVerticalSlider.dart';
+import 'custome_vertical_slider.dart';
 
 class VerticalRangeSelector extends StatefulWidget {
   const VerticalRangeSelector({super.key});
