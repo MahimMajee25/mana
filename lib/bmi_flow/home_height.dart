@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:height_weight/weight.dart';
+import 'package:height_weight/bmi_flow/weight.dart';
 import 'package:height_weight/widgets/display_chip.dart';
 import 'package:height_weight/widgets/height_ruler.dart';
 import 'package:height_weight/widgets/question_label.dart';
@@ -239,6 +239,7 @@ class _HeightSelectorState extends State<HeightSelector> {
                 ),
                 Spacer(),
                 SubmitButton(
+                  submitText: "NEXT",
                   onPressed: () {
                     double heightToSend =
                         isSelectedNotifier.value

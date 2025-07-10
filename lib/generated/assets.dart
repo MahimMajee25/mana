@@ -4,4 +4,9 @@ class Assets {
 
   static const String iconsArrowLeft = 'assets/icons/arrow-left.svg';
   static const String iconsEmblem = 'assets/icons/emblem.svg';
+  static const String iconsTarget = 'assets/icons/target.svg';
+  static const String imagesBlurImage1 = 'assets/images/blur_image1.png';
+  static const String imagesBlurImage2 = 'assets/images/blur_image2.png';
+  static const String imagesMaskGroup = 'assets/images/mask_group.png';
+
 }

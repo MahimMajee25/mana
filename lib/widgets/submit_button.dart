@@ -3,8 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 class SubmitButton extends StatelessWidget {
   final VoidCallback? onPressed;
+  final String? submitText;
 
-  const SubmitButton({super.key, this.onPressed});
+  const SubmitButton({super.key, this.onPressed,this.submitText});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class SubmitButton extends StatelessWidget {
       ),
       onPressed: onPressed ?? () {},
       child: Text(
-        "SUBMIT",
+        submitText??"SUBMIT",
         style: GoogleFonts.inter(
           color: Colors.white,
           fontSize: 14,

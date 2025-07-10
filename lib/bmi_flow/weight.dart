@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:height_weight/bmi_flow/body_type.dart';
 import 'package:height_weight/widgets/display_chip.dart';
 import 'package:height_weight/widgets/question_label.dart';
 import 'package:height_weight/widgets/simple_ruler.dart';
@@ -235,7 +236,18 @@ class _WeightSelectorState extends State<WeightSelector> {
               ],
             ),
             Spacer(),
-            SubmitButton(),
+            SubmitButton(
+              submitText: "NEXT",
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => BodyTypeSelector(),
+                  ),
+                );
+              },
+            ),
             SizedBox(height: screenHeight < 700 ? 12 : 60),
           ],
         ),
