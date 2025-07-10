@@ -110,7 +110,7 @@ class _BodyTypeSelectorState extends State<BodyTypeSelector> {
                 context,
                 MaterialPageRoute(
                   builder:
-                      (context) => TargetBodyTypeSelector(),
+                      (context) => TargetBodyTypeSelector(bodyType: sliderValue,),
                 ),
               );
             },),

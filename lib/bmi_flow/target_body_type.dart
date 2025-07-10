@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:height_weight/bmi_flow/target_weight.dart';
 import 'package:height_weight/widgets/question_label.dart';
 import 'package:height_weight/widgets/range_slider.dart';
-import 'package:height_weight/widgets/single_selector_slider.dart';
 import 'package:height_weight/widgets/submit_button.dart';
 import 'package:height_weight/widgets/top_stack.dart';
 
 class TargetBodyTypeSelector extends StatefulWidget {
-  const TargetBodyTypeSelector({super.key});
+  final double bodyType;
+   const TargetBodyTypeSelector({super.key,required this.bodyType});
 
   @override
   _TargetBodyTypeSelectorState createState() => _TargetBodyTypeSelectorState();
 }
 
 class _TargetBodyTypeSelectorState extends State<TargetBodyTypeSelector> {
-  double sliderValue = 1.0;
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _TargetBodyTypeSelectorState extends State<TargetBodyTypeSelector> {
             SizedBox(height: 24,),
             Column(
               children: [
-                CustomRangeSlider(leftValue: 2,
+                CustomRangeSlider(leftValue: widget.bodyType,
                   onChanged: (RangeValues values) {
                     print('Start: ${values.start}, End: ${values.end}');
                   },
@@ -77,6 +77,7 @@ class _TargetBodyTypeSelectorState extends State<TargetBodyTypeSelector> {
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -84,7 +85,7 @@ class _TargetBodyTypeSelectorState extends State<TargetBodyTypeSelector> {
                       SvgPicture.asset('assets/icons/target.svg',height: 24,width: 24,),
                       SizedBox(width: 8),
                       Text(
-                        "IDEAL BODY TYPE",
+                        "ACHIEVABLE GOAL",
                         style: GoogleFonts.inter(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -96,7 +97,7 @@ class _TargetBodyTypeSelectorState extends State<TargetBodyTypeSelector> {
                   SizedBox(height: 8),
                   Text(
                     textAlign: TextAlign.start,
-                    "Your physique is nearly flawless! Keep up the great work",
+                    "Goal is reasonable & achievable",
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -107,7 +108,17 @@ class _TargetBodyTypeSelectorState extends State<TargetBodyTypeSelector> {
               ),
             ),
             Spacer(),
-            SubmitButton(submitText: "NEXT"),
+            SubmitButton(submitText: "NEXT",
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => TargetWeightSelector(),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
