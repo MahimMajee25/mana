@@ -10,6 +10,7 @@ class RangeSliderOk extends StatefulWidget {
 
 class _RangeSliderOkState extends State<RangeSliderOk> {
   RangeValues _currentRangeValues = const RangeValues(1, 5);
+  RangeValues _previousRangeValues = const RangeValues(1, 5);
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +30,19 @@ class _RangeSliderOkState extends State<RangeSliderOk> {
           values: _currentRangeValues,
           onChanged: (val) {
             setState(() {
-              _currentRangeValues = val;
-              HapticFeedback.vibrate();
+              // Keep the start value fixed, only allow end value to change
+              RangeValues newValues = RangeValues(1.0, val.end);
+
+              // Check if end value changed (crossed a discrete value)
+              bool endChanged = newValues.end.round() != _previousRangeValues.end.round();
+
+              if (endChanged) {
+                // Trigger haptic feedback when crossing tick marks
+                HapticFeedback.selectionClick();
+              }
+
+              _previousRangeValues = _currentRangeValues;
+              _currentRangeValues = newValues;
             });
           },
           min: 1,
