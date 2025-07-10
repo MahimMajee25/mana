@@ -22,6 +22,7 @@ class _RangeSliderOkState extends State<RangeSliderOk> {
           trackHeight: 36,
           inactiveTrackColor: const Color(0x10F3F4F1),
           activeTrackColor: const Color(0xFF1A1B18),
+          thumbColor: Color(0xFFFF0101),
         ),
         child: RangeSlider(
           values: _currentRangeValues,
@@ -129,8 +130,8 @@ class CustomRangeTrackShape extends RangeSliderTrackShape {
 
     // Paint active track (between thumbs, extending to thumb centers)
     final double thumbRadius = 12.0; // Match the thumb radius
-    final double activeTrackLeft = startThumbCenter.dx - thumbRadius;
-    final double activeTrackRight = endThumbCenter.dx + thumbRadius;
+    final double activeTrackLeft = startThumbCenter.dx - thumbRadius-8;
+    final double activeTrackRight = endThumbCenter.dx + thumbRadius+8;
     final double activeTrackWidth = activeTrackRight - activeTrackLeft;
 
     if (activeTrackWidth > 0) {
@@ -154,9 +155,9 @@ class CustomRangeTrackShape extends RangeSliderTrackShape {
 
       // Paint white border around active track
       final Paint borderPaint = Paint()
-        ..color = Colors.white
+        ..color = Color(0x70F3F4F1)
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.0;
+        ..strokeWidth = 1.0;
 
       canvas.drawRRect(activeTrackRRect, borderPaint);
     }
@@ -213,24 +214,9 @@ class CustomRangeThumbShape extends RangeSliderThumbShape {
 
     final Paint innerPaint =
     Paint()
-      ..color = Colors.white
+      ..color = Colors.black
       ..style = PaintingStyle.fill;
 
     canvas.drawCircle(center, radius * 0.6, innerPaint);
-
-    final Paint borderPaint =
-    Paint()
-      ..color = sliderTheme.thumbColor ?? Colors.blue
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0;
-
-    canvas.drawCircle(center, radius, borderPaint);
-
-    final Paint dotPaint =
-    Paint()
-      ..color = sliderTheme.thumbColor ?? Colors.blue
-      ..style = PaintingStyle.fill;
-
-    canvas.drawCircle(center, radius * 0.2, dotPaint);
   }
 }
