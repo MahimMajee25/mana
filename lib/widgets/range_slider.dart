@@ -203,7 +203,7 @@ class CustomRangeThumbShape extends RangeSliderThumbShape {
     final Canvas canvas = context.canvas;
     final Tween<double> radiusTween = Tween<double>(begin: disabledThumbRadius, end: thumbRadius);
 
-    final double radius = radiusTween.evaluate(enableAnimation);
+    final double radius = radiusTween.evaluate(enableAnimation)-2;
     final double currentElevation = isPressed == true ? pressedElevation : elevation;
 
     final Path shadowPath = Path()..addOval(Rect.fromCircle(center: center, radius: radius));
