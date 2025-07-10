@@ -16,12 +16,12 @@ class _RangeSliderOkState extends State<RangeSliderOk> {
       padding: const EdgeInsets.all(8.0),
       child: SliderTheme(
         data: SliderThemeData(
-          rangeTickMarkShape: CustomRangeTickShape(),
-          trackShape: RoundedRectSliderTrackShape(),
+          rangeTickMarkShape: CustomRangeTickShape(), // Show tick marks only on inactive track
+          rangeTrackShape: CustomRangeTrackShape(), // Custom track with white border
           rangeThumbShape: CustomRangeThumbShape(),
           trackHeight: 36,
-          inactiveTrackColor: Color(0x10F3F4F1),
-          activeTrackColor: Color(0xFF1A1B18),
+          inactiveTrackColor: const Color(0x10F3F4F1),
+          activeTrackColor: const Color(0xFF1A1B18),
         ),
         child: RangeSlider(
           values: _currentRangeValues,
@@ -47,32 +47,119 @@ class CustomRangeTickShape extends RangeSliderTickMarkShape {
 
   @override
   void paint(
-    PaintingContext context,
-    Offset center, {
-    required RenderBox parentBox,
-    required SliderThemeData sliderTheme,
-    required Animation<double> enableAnimation,
-    required Offset startThumbCenter,
-    required Offset endThumbCenter,
-    bool? isEnabled,
-    required TextDirection textDirection,
-  }) {
+      PaintingContext context,
+      Offset center, {
+        required RenderBox parentBox,
+        required SliderThemeData sliderTheme,
+        required Animation<double> enableAnimation,
+        required Offset startThumbCenter,
+        required Offset endThumbCenter,
+        bool? isEnabled,
+        required TextDirection textDirection,
+      }) {
     final canvas = context.canvas;
 
-    final bool isActive = center.dx >= startThumbCenter.dx && center.dx <= endThumbCenter.dx;
+    // Only show tick marks on inactive track (outside the range)
+    final bool isInActiveRange = center.dx >= startThumbCenter.dx && center.dx <= endThumbCenter.dx;
 
-    final color =
-        isActive ? sliderTheme.activeTickMarkColor ?? Colors.blue : sliderTheme.inactiveTickMarkColor ?? Colors.grey;
+    if (!isInActiveRange) {
+      final color = sliderTheme.inactiveTickMarkColor ?? Colors.grey;
+      final paint = Paint()
+        ..color = color
+        ..style = PaintingStyle.fill;
 
-    final paint =
-        Paint()
-          ..color = color
-          ..style = PaintingStyle.fill;
+      const double tickWidth = 2;
+      const double tickHeight = 12;
 
-    const double tickWidth = 2;
-    const double tickHeight = 12;
+      canvas.drawRect(Rect.fromCenter(center: center, width: tickWidth, height: tickHeight), paint);
+    }
+  }
+}
 
-    canvas.drawRect(Rect.fromCenter(center: center, width: tickWidth, height: tickHeight), paint);
+class CustomRangeTrackShape extends RangeSliderTrackShape {
+  @override
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final double trackHeight = sliderTheme.trackHeight!;
+    final double trackLeft = offset.dx;
+    final double trackTop = offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final double trackWidth = parentBox.size.width;
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
+  }
+
+  @override
+  void paint(
+      PaintingContext context,
+      Offset offset, {
+        required RenderBox parentBox,
+        required SliderThemeData sliderTheme,
+        required Animation<double> enableAnimation,
+        required Offset startThumbCenter,
+        required Offset endThumbCenter,
+        bool isEnabled = false,
+        bool isDiscrete = false,
+        required TextDirection textDirection,
+      }) {
+    final Rect trackRect = getPreferredRect(
+      parentBox: parentBox,
+      offset: offset,
+      sliderTheme: sliderTheme,
+      isEnabled: isEnabled,
+      isDiscrete: isDiscrete,
+    );
+
+    final Canvas canvas = context.canvas;
+    final double trackRadius = trackRect.height / 2;
+
+    // Paint inactive track (full width)
+    final Paint inactiveTrackPaint = Paint()
+      ..color = sliderTheme.inactiveTrackColor!
+      ..style = PaintingStyle.fill;
+
+    final RRect inactiveTrackRRect = RRect.fromRectAndRadius(
+      trackRect,
+      Radius.circular(trackRadius),
+    );
+    canvas.drawRRect(inactiveTrackRRect, inactiveTrackPaint);
+
+    // Paint active track (between thumbs, extending to thumb centers)
+    final double thumbRadius = 12.0; // Match the thumb radius
+    final double activeTrackLeft = startThumbCenter.dx - thumbRadius;
+    final double activeTrackRight = endThumbCenter.dx + thumbRadius;
+    final double activeTrackWidth = activeTrackRight - activeTrackLeft;
+
+    if (activeTrackWidth > 0) {
+      final Rect activeTrackRect = Rect.fromLTWH(
+        activeTrackLeft.clamp(trackRect.left, trackRect.right - activeTrackWidth),
+        trackRect.top,
+        activeTrackWidth.clamp(0, trackRect.width),
+        trackRect.height,
+      );
+
+      // Paint active track background
+      final Paint activeTrackPaint = Paint()
+        ..color = sliderTheme.activeTrackColor!
+        ..style = PaintingStyle.fill;
+
+      final RRect activeTrackRRect = RRect.fromRectAndRadius(
+        activeTrackRect,
+        Radius.circular(trackRadius),
+      );
+      canvas.drawRRect(activeTrackRRect, activeTrackPaint);
+
+      // Paint white border around active track
+      final Paint borderPaint = Paint()
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.0;
+
+      canvas.drawRRect(activeTrackRRect, borderPaint);
+    }
   }
 }
 
@@ -96,18 +183,18 @@ class CustomRangeThumbShape extends RangeSliderThumbShape {
 
   @override
   void paint(
-    PaintingContext context,
-    Offset center, {
-    required Animation<double> activationAnimation,
-    required Animation<double> enableAnimation,
-    bool isDiscrete = false,
-    bool isEnabled = false,
-    bool? isOnTop,
-    required SliderThemeData sliderTheme,
-    TextDirection? textDirection,
-    Thumb? thumb,
-    bool? isPressed,
-  }) {
+      PaintingContext context,
+      Offset center, {
+        required Animation<double> activationAnimation,
+        required Animation<double> enableAnimation,
+        bool isDiscrete = false,
+        bool isEnabled = false,
+        bool? isOnTop,
+        required SliderThemeData sliderTheme,
+        TextDirection? textDirection,
+        Thumb? thumb,
+        bool? isPressed,
+      }) {
     final Canvas canvas = context.canvas;
     final Tween<double> radiusTween = Tween<double>(begin: disabledThumbRadius, end: thumbRadius);
 
@@ -118,31 +205,31 @@ class CustomRangeThumbShape extends RangeSliderThumbShape {
     canvas.drawShadow(shadowPath, Colors.black, currentElevation, true);
 
     final Paint thumbPaint =
-        Paint()
-          ..color = sliderTheme.thumbColor ?? Colors.blue
-          ..style = PaintingStyle.fill;
+    Paint()
+      ..color = sliderTheme.thumbColor ?? Colors.blue
+      ..style = PaintingStyle.fill;
 
     canvas.drawCircle(center, radius, thumbPaint);
 
     final Paint innerPaint =
-        Paint()
-          ..color = Colors.white
-          ..style = PaintingStyle.fill;
+    Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.fill;
 
     canvas.drawCircle(center, radius * 0.6, innerPaint);
 
     final Paint borderPaint =
-        Paint()
-          ..color = sliderTheme.thumbColor ?? Colors.blue
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2.0;
+    Paint()
+      ..color = sliderTheme.thumbColor ?? Colors.blue
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
 
     canvas.drawCircle(center, radius, borderPaint);
 
     final Paint dotPaint =
-        Paint()
-          ..color = sliderTheme.thumbColor ?? Colors.blue
-          ..style = PaintingStyle.fill;
+    Paint()
+      ..color = sliderTheme.thumbColor ?? Colors.blue
+      ..style = PaintingStyle.fill;
 
     canvas.drawCircle(center, radius * 0.2, dotPaint);
   }
