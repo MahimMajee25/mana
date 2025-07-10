@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class RangeSliderOk extends StatefulWidget {
   const RangeSliderOk({super.key});
@@ -29,6 +30,7 @@ class _RangeSliderOkState extends State<RangeSliderOk> {
           onChanged: (val) {
             setState(() {
               _currentRangeValues = val;
+              HapticFeedback.vibrate();
             });
           },
           min: 1,
