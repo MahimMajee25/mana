@@ -58,11 +58,11 @@ class _CustomVerticalSliderState extends State<CustomVerticalSlider> {
 
             // Thumb
             Positioned(
-              left: (constraints.maxWidth - thumbRadius * 2) / 2+4,
+              left: (constraints.maxWidth - thumbRadius * 2) / 2+6,
               top: thumbPosition - thumbRadius+5,
               child: Container(
-                width: 24,
-                height:24,
+                width: 20,
+                height:20,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.black,
@@ -151,7 +151,7 @@ class _BackgroundTrackPainter extends CustomPainter {
     final rect = RRect.fromRectAndRadius(
       Rect.fromLTRB(
         size.width / 2 - trackWidth / 2,
-        padding,
+        padding-20,
         size.width / 2 + trackWidth / 2,
         size.height - numberHeight,
       ),
@@ -159,7 +159,7 @@ class _BackgroundTrackPainter extends CustomPainter {
     );
 
     final backgroundPaint = Paint()
-      ..color = Colors.grey
+      ..color = Color.fromRGBO(243, 244, 241, 0.3)
       ..style = PaintingStyle.fill;
 
     canvas.drawRRect(rect, backgroundPaint);
@@ -173,8 +173,8 @@ class _TickPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final tickPaint = Paint()
-      ..color = Colors.grey.shade600
-      ..strokeWidth = 1;
+      ..color = Color.fromRGBO(243, 244, 241, 0.1)
+      ..strokeWidth = 2;
 
     const double padding = 24;
     const double numberHeight = 36;
@@ -184,8 +184,8 @@ class _TickPainter extends CustomPainter {
     for (int i = 0; i <= 10; i++) { // Changed from 9 to 10
       final dy = padding + (i * spacing);
       canvas.drawLine(
-        Offset(size.width / 2 - 10, dy),
-        Offset(size.width / 2 + 10, dy),
+        Offset(size.width / 2 - 12, dy),
+        Offset(size.width / 2 + 12, dy),
         tickPaint,
       );
     }
@@ -227,8 +227,8 @@ class _FillPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final borderPaint = Paint()
-      ..color = Colors.white
-      ..strokeWidth = 2
+      ..color = Color.fromRGBO(243, 244, 241, 0.3)
+      ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
     canvas.drawRRect(rect, fillPaint);
