@@ -182,7 +182,7 @@ class _TickPainter extends CustomPainter {
     final spacing = trackHeight / 10; // Changed from 9 to 10 for 0-10 scale
 
     for (int i = 0; i <= 10; i++) { // Changed from 9 to 10
-      final dy = padding + (i * spacing);
+      final dy = padding + (i * spacing)+20;
       canvas.drawLine(
         Offset(size.width / 2 - 12, dy),
         Offset(size.width / 2 + 12, dy),
