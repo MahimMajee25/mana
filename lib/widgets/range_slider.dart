@@ -13,7 +13,7 @@ class _RangeSliderOkState extends State<RangeSliderOk> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: SliderTheme(
         data: SliderThemeData(
           rangeTickMarkShape: CustomRangeTickShape(), // Show tick marks only on inactive track
@@ -130,13 +130,13 @@ class CustomRangeTrackShape extends RangeSliderTrackShape {
 
     // Paint active track (between thumbs, extending to thumb centers)
     final double thumbRadius = 12.0; // Match the thumb radius
-    final double activeTrackLeft = startThumbCenter.dx - thumbRadius-8;
-    final double activeTrackRight = endThumbCenter.dx + thumbRadius+8;
+    final double activeTrackLeft = startThumbCenter.dx - thumbRadius-6;
+    final double activeTrackRight = endThumbCenter.dx + thumbRadius+6;
     final double activeTrackWidth = activeTrackRight - activeTrackLeft;
 
     if (activeTrackWidth > 0) {
       final Rect activeTrackRect = Rect.fromLTWH(
-        activeTrackLeft.clamp(trackRect.left, trackRect.right - activeTrackWidth),
+        activeTrackLeft.clamp(trackRect.left, trackRect.right - activeTrackWidth+10),
         trackRect.top,
         activeTrackWidth.clamp(0, trackRect.width),
         trackRect.height,
