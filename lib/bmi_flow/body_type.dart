@@ -14,6 +14,8 @@ class BodyTypeSelector extends StatefulWidget {
 }
 
 class _BodyTypeSelectorState extends State<BodyTypeSelector> {
+  ValueNotifier<double> sliderValue = ValueNotifier<double>(1.0);
+
   @override
   void initState() {
     super.initState();
@@ -48,7 +50,9 @@ class _BodyTypeSelectorState extends State<BodyTypeSelector> {
             SizedBox(height: 24,),
             Column(
               children: [
-                SingleSelectorSlider(sliderWidth: 339,),
+                SingleSelectorSlider(sliderWidth: 339,onChanged: (val){
+                  sliderValue.value=val;
+                },),
                 SizedBox(height: 12,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

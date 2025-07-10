@@ -7,8 +7,9 @@ class SingleSelectorSlider extends StatefulWidget {
   final double? minValue;
   final double? maxValue;
   final int? divisions;
+  final ValueChanged<double>? onChanged;
 
-  const SingleSelectorSlider({super.key, this.sliderHeight, this.minValue, this.maxValue, this.divisions,this.sliderWidth});
+  const SingleSelectorSlider({super.key, this.sliderHeight, this.minValue, this.maxValue, this.divisions,this.sliderWidth,required this.onChanged});
 
   @override
   State<SingleSelectorSlider> createState() => _SingleSelectorSliderState();
@@ -44,6 +45,8 @@ class _SingleSelectorSliderState extends State<SingleSelectorSlider> {
 
               _previousValue = _currentValue;
               _currentValue = val;
+
+              widget.onChanged?.call(val);
             });
           },
           min: widget.minValue ?? 1,
