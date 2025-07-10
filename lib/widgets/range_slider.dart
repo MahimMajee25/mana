@@ -20,7 +20,7 @@ class _RangeSliderOkState extends State<RangeSliderOk> {
           rangeTrackShape: CustomRangeTrackShape(), // Custom track with white border
           rangeThumbShape: CustomRangeThumbShape(),
           trackHeight: 36,
-          inactiveTrackColor: const Color(0x10F3F4F1),
+          inactiveTrackColor: const Color(0xFF272727),
           activeTrackColor: const Color(0xFF1A1B18),
           thumbColor: Color(0xFFFF0101),
         ),
@@ -64,15 +64,19 @@ class CustomRangeTickShape extends RangeSliderTickMarkShape {
     final bool isInActiveRange = center.dx >= startThumbCenter.dx && center.dx <= endThumbCenter.dx;
 
     if (!isInActiveRange) {
-      final color = sliderTheme.inactiveTickMarkColor ?? Colors.grey;
-      final paint = Paint()
-        ..color = color
+      final Paint thumbPaint =
+      Paint()
+        ..color = Color(0xFF393939)
         ..style = PaintingStyle.fill;
 
-      const double tickWidth = 2;
-      const double tickHeight = 12;
+      canvas.drawCircle(center, 6, thumbPaint);
 
-      canvas.drawRect(Rect.fromCenter(center: center, width: tickWidth, height: tickHeight), paint);
+      final Paint innerPaint =
+      Paint()
+        ..color = Color(0xFF1F1F1F)
+        ..style = PaintingStyle.fill;
+
+      canvas.drawCircle(center, 6 * 0.6, innerPaint);
     }
   }
 }
