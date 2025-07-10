@@ -34,7 +34,7 @@ class _VerticalRangeSelectorState extends State<VerticalRangeSelector> {
             const SizedBox(height: 30),
             Center(
               child: SizedBox(
-                height: 360,
+                height: 365,
                 child: CustomVerticalSlider(
                   value: _value,
                   onChanged: (val) {
