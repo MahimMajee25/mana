@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:height_weight/home_height.dart';
+import 'package:height_weight/bmi_flow/home_height.dart';
+import 'package:height_weight/slider1.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
