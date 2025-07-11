@@ -9,7 +9,8 @@ import 'package:height_weight/widgets/toggle_button.dart';
 import 'package:height_weight/widgets/top_stack.dart';
 
 class BMIAge extends StatefulWidget {
-  const BMIAge({super.key,});
+  const BMIAge({super.key});
+
   @override
   _BMIAgeState createState() => _BMIAgeState();
 }
@@ -37,11 +38,7 @@ class _BMIAgeState extends State<BMIAge> {
     return Scaffold(
       backgroundColor: Color(0xFF030402),
       body: Padding(
-        padding: EdgeInsets.only(
-          top: MediaQuery.of(context).padding.top + 20,
-          left: 16,
-          right: 16,
-        ),
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 20, left: 16, right: 16),
         child: Column(
           children: [
             TopStack(
@@ -49,168 +46,133 @@ class _BMIAgeState extends State<BMIAge> {
                 Navigator.pop(context);
               },
             ),
-            SizedBox(height: 52),
-            FittedBox(child: QuestionLabel(textLabel: "What’s your Target weight?")),
-            SizedBox(height: 24),
-            ValueListenableBuilder(
-              valueListenable: isSelectedNotifier,
-              builder: (context, isSelected, _) {
-                return UnitToggleTab(
-                  text1: "Kg",
-                  text2: "lbs",
-                  isFirstSelected: isSelected,
-                  onToggle: (value) {
-                    if (value != isSelectedNotifier.value) {
-                      if (value) {
-                        kgWeight.value = defaultKgWeight;
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          rulerController.value = defaultKgWeight;
-                        });
-                      } else {
-                        lbsWeight.value = defaultLbsWeight;
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          rulerController.value = defaultLbsWeight;
-                        });
-                      }
-                    }
-                    isSelectedNotifier.value = value;
-                  },
-                );
-              },
-            ),
-            ValueListenableBuilder(
-              builder: (context, isSelected, _) {
-                return SimpleRuler(
-                  controller: rulerController,
-                  initialValue: isSelected ? kgWeight.value! : lbsWeight.value!,
-                  orientation: RulerOrientation.horizontal,
-                  minValue: isSelected ? 10 : 20,
-                  maxValue: isSelected ? 200 : 440,
-                  minorTickLength: 41,
-                  majorTickLength: 76,
-                  tickColor: Color.fromRGBO(243, 244, 241, 0.3),
-                  labelStyle: GoogleFonts.inter(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    height: 1.5,
-                    letterSpacing: 0.0,
-                    color: Color(0xFFF3F4F1),
-                  ),
-                  postText: isSelected ? " kg" : " lbs",
-                  customPointer: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(height: 70, width: 2, color: Color(0xFFCC0E00)),
-                      Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFCC0E00),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                    ],
-                  ),
-                  onChanged: (val) {
-                    if (isSelected) {
-                      kgWeight.value = val;
-                    } else {
-                      lbsWeight.value = val;
-                    }
-                  },
-                  minorTicksPerInterval: 9,
-                  majorTickInterval: 10,
-                  labelSpacing: 12,
-                  tickSpacing: 20,
-                  minorTickPadding: 22,
-                );
-              },
-              valueListenable: isSelectedNotifier,
-            ),
-            SizedBox(height: 24),
-            ValueListenableBuilder(
-              builder: (context, isSelected, _) {
-                if (isSelected) {
-                  return ValueListenableBuilder(
-                    builder: (context, weight, _) {
-                      return DisplayChip(
-                        number: weight!.toStringAsFixed(1),
-                        unit: 'kgs',
-                      );
-                    },
-                    valueListenable: kgWeight,
-                  );
-                } else {
-                  return ValueListenableBuilder(
-                    builder: (context, weight, _) {
-                      return DisplayChip(
-                        number: weight!.toStringAsFixed(1),
-                        unit: 'lbs',
-                      );
-                    },
-                    valueListenable: lbsWeight,
-                  );
-                }
-              },
-              valueListenable: isSelectedNotifier,
-            ),
-            SizedBox(height: screenHeight < 700 ? 9.7 : 36),
-            Container(
-              padding: EdgeInsets.symmetric(
-                vertical: 12,
-                horizontal: 20,
+            SizedBox(height: 47),
+            QuestionLabel(textLabel: "What is your age?"),
+            SizedBox(height: 32),
+            RoundedTextField(
+              controller: TextEditingController(),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  "Years",
+                  style: GoogleFonts.inter(fontWeight: FontWeight.w400, fontSize: 16, color: Color(0x70F3F4F1)),
+                ),
               ),
-              decoration: BoxDecoration(
-                color: Color(0xFF1A1B18),
-                borderRadius: BorderRadius.circular(16),
+              textStyle: GoogleFonts.inter(fontWeight: FontWeight.w500,
+                fontSize: 20,
+                color: Color(0xFFF3F4F1),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SvgPicture.asset('assets/icons/target.svg',height: 24,width: 24,),
-                      SizedBox(width: 8),
-                      Text(
-                        "CHALLENGING GOAL",
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFFF3F4F1),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 13,),
-                  Text(
-                    "You will gain 38% of your weight",
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFFF3F4F1),
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    textAlign: TextAlign.start,
-                    "You will enjoy even greater benefits from muscle gain",
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: Color.fromRGBO(243, 244, 241, 0.7),
-                    ),
-                  ),
-                ],
+              prefixIcon: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  "Years",
+                  style: GoogleFonts.inter(fontWeight: FontWeight.w400, fontSize: 16, color: Color(0x00000000)),
+                ),
               ),
             ),
             Spacer(),
-            SubmitButton(
-              submitText: "NEXT",
-            ),
+            SubmitButton(submitText: "NEXT"),
             SizedBox(height: screenHeight < 700 ? 12 : 60),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class RoundedTextField extends StatefulWidget {
+  final String hintText;
+  final String? labelText;
+  final TextEditingController controller;
+  final TextInputType keyboardType;
+  final bool obscureText;
+  final Color textColor;
+  final Color hintColor;
+  final double borderRadius;
+  final EdgeInsets contentPadding;
+  final TextStyle? textStyle;
+  final Function(String)? onChanged;
+  final String? Function(String?)? validator;
+  final bool enabled;
+  final Widget? suffixIcon;
+  final Widget? prefixIcon;
+
+  const RoundedTextField({
+    Key? key,
+    required this.controller,
+    this.hintText = '',
+    this.labelText,
+    this.keyboardType = TextInputType.text,
+    this.obscureText = false,
+    this.textColor = Colors.white,
+    this.hintColor = const Color(0xFF8E8E93),
+    this.borderRadius = 99999,
+    this.contentPadding = const EdgeInsets.symmetric(vertical: 14.0),
+    this.textStyle,
+    this.onChanged,
+    this.validator,
+    this.enabled = true,
+    this.suffixIcon,
+    this.prefixIcon,
+  }) : super(key: key);
+
+  @override
+  State<RoundedTextField> createState() => _RoundedTextFieldState();
+}
+
+class _RoundedTextFieldState extends State<RoundedTextField> {
+  late FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+    _focusNode.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment(-0.4, -0.9),
+          end: Alignment(0.6, 1.1),
+          colors: [Color(0xFF151515), Color(0xFF2B2B2B)],
+        ),
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+        border: Border.all(color: Color(0xFF968889), width: 1.0),
+      ),
+      child: TextFormField(
+        controller: widget.controller,
+        focusNode: _focusNode,
+        keyboardType: widget.keyboardType,
+        obscureText: widget.obscureText,
+        enabled: widget.enabled,
+        onChanged: widget.onChanged,
+        validator: widget.validator,
+        textAlign: TextAlign.center,
+        style: widget.textStyle ?? TextStyle(color: widget.textColor, fontSize: 16.0, fontWeight: FontWeight.w400),
+        decoration: InputDecoration(
+          hintText: widget.hintText,
+          labelText: widget.labelText,
+          hintStyle: TextStyle(color: widget.hintColor, fontSize: 16.0, fontWeight: FontWeight.w400),
+          labelStyle: TextStyle(color: widget.hintColor, fontSize: 16.0, fontWeight: FontWeight.w400),
+          contentPadding: widget.contentPadding,
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          focusedErrorBorder: InputBorder.none,
+          suffixIcon: widget.suffixIcon,
+          prefixIcon: widget.prefixIcon,
         ),
       ),
     );
